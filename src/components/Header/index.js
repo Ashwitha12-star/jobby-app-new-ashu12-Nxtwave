@@ -12,6 +12,7 @@ const Header = props => {
     const {history} = props
     history.replace('/login')
   }
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -22,8 +23,9 @@ const Header = props => {
             className="home-website-logo"
           />
         </Link>
+
         <ul className="nav-items">
-          <li>
+          <li className="nav-item">
             <Link to="/" className="nav-link-lg">
               Home
             </Link>
@@ -31,7 +33,7 @@ const Header = props => {
               <AiFillHome className="small-header-icons" />
             </Link>
           </li>
-          <li>
+          <li className="nav-item">
             <Link to="/jobs" className="nav-link-lg">
               Jobs
             </Link>
@@ -39,7 +41,7 @@ const Header = props => {
               <BsFillBriefcaseFill className="small-header-icons" />
             </Link>
           </li>
-          <li className="logout-btn-list-item-small">
+          <li className="nav-item logout-btn-list-item-small">
             <button
               type="button"
               className="logout-button-sm"
@@ -49,6 +51,7 @@ const Header = props => {
             </button>
           </li>
         </ul>
+
         <button
           type="button"
           className="logout-button-lg"

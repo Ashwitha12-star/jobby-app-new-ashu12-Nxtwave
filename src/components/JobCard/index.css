@@ -98,3 +98,57 @@
   font-size: 15px;
   line-height: 1.4;
 }
+.quick-apply-button {
+  background-color: #0b69ff;
+  color: #ffffff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.quick-apply-button:hover {
+  background-color: #0952cc;
+}
+
+.quick-apply-button.applied {
+  background-color: #38a169;
+  cursor: not-allowed;
+}
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.quick-apply-button,
+.save-job-button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.quick-apply-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.quick-apply-button.applied {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.save-job-button {
+  background-color: #f1f1f1;
+  color: #444;
+}
+
+.save-job-button.saved {
+  background-color: #ffccd5;
+  color: #d60039;
+}

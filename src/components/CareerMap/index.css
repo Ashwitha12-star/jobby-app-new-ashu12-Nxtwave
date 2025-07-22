@@ -1,0 +1,11 @@
+/* src/components/CareerMap/index.css */
+
+.career-map-container {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 12px;
+}
+
+h2 {
+  color: #333;
+}

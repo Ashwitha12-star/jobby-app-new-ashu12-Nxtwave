@@ -24,17 +24,23 @@ class Login extends Component {
 
   onSubmitForm = async event => {
     event.preventDefault()
-    let {username, password} = this.state
+    const {username, password} = this.state
 
-    if (username.toLowerCase().trim(' ') === 'ashwitha') username = 'rahul'
-    if (password === 'ashwitha@1234') password = 'rahul@2021'
+    // ✅ Save entered username (for greeting or reference)
+    localStorage.setItem('loggedInUser', username)
 
-    const userDetails = {username, password}
+    // ✅ Always use fixed backend credentials
+    const userDetails = {
+      username: 'rahul',
+      password: 'rahul@2021',
+    }
+
     const LoginApiUrl = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
     }
+
     const response = await fetch(LoginApiUrl, options)
     const data = await response.json()
 
@@ -52,16 +58,16 @@ class Login extends Component {
   renderUsernameField = () => {
     const {username} = this.state
     return (
-      <div className='input-field-container'>
-        <label htmlFor='username' className='login-input-label'>
+      <div className="input-field-container">
+        <label htmlFor="username" className="login-input-label">
           USERNAME
         </label>
         <input
-          type='text'
+          type="text"
           value={username}
-          className='login-input-field'
-          placeholder='ashwitha'
-          id='username'
+          className="login-input-field"
+          placeholder="Enter any username"
+          id="username"
           onChange={this.updateUsername}
         />
       </div>
@@ -71,16 +77,16 @@ class Login extends Component {
   renderPasswordField = () => {
     const {password} = this.state
     return (
-      <div className='input-field-container'>
-        <label htmlFor='password' className='login-input-label'>
+      <div className="input-field-container">
+        <label htmlFor="password" className="login-input-label">
           PASSWORD
         </label>
         <input
-          type='password'
+          type="password"
           value={password}
-          className='login-input-field'
-          placeholder='ashwitha@1234'
-          id='password'
+          className="login-input-field"
+          placeholder="Enter any password"
+          id="password"
           onChange={this.updatePassword}
         />
       </div>
@@ -90,24 +96,24 @@ class Login extends Component {
   render() {
     const jwtToken = Cookies.get('jwt_token')
     if (jwtToken !== undefined) {
-      return <Redirect to='/' />
+      return <Redirect to="/" />
     }
     const {errorMsg, showErrorMsg} = this.state
     return (
-      <div className='login-container'>
-        <form className='login-form' onSubmit={this.onSubmitForm}>
+      <div className="login-container">
+        <form className="login-form" onSubmit={this.onSubmitForm}>
           <img
-            src='https://assets.ccbp.in/frontend/react-js/logo-img.png'
-            alt='website logo'
-            className='website-logo-login-form'
+            src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+            alt="website logo"
+            className="website-logo-login-form"
           />
           {this.renderUsernameField()}
           {this.renderPasswordField()}
           <div>
-            <button type='submit' className='login-button'>
+            <button type="submit" className="login-button">
               Login
             </button>
-            {showErrorMsg && <p className='error-msg'>*{errorMsg}</p>}
+            {showErrorMsg && <p className="error-msg">*{errorMsg}</p>}
           </div>
         </form>
       </div>

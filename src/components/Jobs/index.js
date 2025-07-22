@@ -23,15 +23,34 @@ class Jobs extends Component {
     profileDetails: {},
     profileApiStatus: apiStatusConstants.initial,
     jobsList: [],
+    externalJobs: [],
     jobsApiStatus: apiStatusConstants.initial,
     searchInput: '',
     activeSalaryRangeId: '',
     employmentTypesChecked: [],
+    showNotification: false,
   }
 
   componentDidMount() {
     this.getProfileDetails()
     this.getJobs()
+    this.loadApprovedJobs()
+  }
+
+  loadApprovedJobs = () => {
+    const approvedJobs = JSON.parse(localStorage.getItem('approvedJobs')) || []
+    const updatedData = approvedJobs.map(job => ({
+      id: job.id || job.url,
+      title: job.position,
+      companyLogoUrl: job.logo || 'https://via.placeholder.com/100',
+      jobDescription: job.description || 'External Job from Admin',
+      location: job.location || 'Remote',
+      employmentType: job.tags?.join(', ') || 'Full Time',
+      packagePerAnnum: 'External',
+      rating: 4,
+    }))
+
+    this.setState({externalJobs: updatedData})
   }
 
   updateEmploymentTypesChecked = typeId => {
@@ -42,9 +61,8 @@ class Jobs extends Component {
         eachType => eachType !== typeId,
       )
     } else {
-      updatedList = [...updatedList, typeId]
+      updatedList = [...employmentTypesChecked, typeId]
     }
-
     this.setState({employmentTypesChecked: updatedList}, this.getJobs)
   }
 
@@ -54,8 +72,11 @@ class Jobs extends Component {
   getJobs = async () => {
     this.setState({jobsApiStatus: apiStatusConstants.inProgress})
 
-    const {activeSalaryRangeId, employmentTypesChecked, searchInput} =
-      this.state
+    const {
+      activeSalaryRangeId,
+      employmentTypesChecked,
+      searchInput,
+    } = this.state
     const employTypes = employmentTypesChecked.join(',')
     const jwtToken = Cookies.get('jwt_token')
     const apiUrl = `https://apis.ccbp.in/jobs?employment_type=${employTypes}&minimum_package=${activeSalaryRangeId}&search=${searchInput}`
@@ -66,6 +87,7 @@ class Jobs extends Component {
       },
       method: 'GET',
     }
+
     const response = await fetch(apiUrl, options)
     const data = await response.json()
     if (response.ok === true) {
@@ -80,9 +102,17 @@ class Jobs extends Component {
         rating: eachJob.rating,
         title: eachJob.title,
       }))
+
+      const previousCount = parseInt(localStorage.getItem('job_count')) || 0
+      const currentCount = updatedData.length
+      const showNotification = currentCount > previousCount
+
+      localStorage.setItem('job_count', currentCount.toString())
+
       this.setState({
         jobsList: updatedData,
         jobsApiStatus: apiStatusConstants.success,
+        showNotification,
       })
     } else {
       this.setState({jobsApiStatus: apiStatusConstants.failure})
@@ -100,6 +130,7 @@ class Jobs extends Component {
       },
       method: 'GET',
     }
+
     const response = await fetch(apiUrl, options)
     const data = await response.json()
     if (response.ok === true) {
@@ -182,12 +213,24 @@ class Jobs extends Component {
   )
 
   renderJobsList = () => {
-    const {jobsList} = this.state
+    const {jobsList, externalJobs, showNotification, searchInput} = this.state
+
+    const filteredExternalJobs = externalJobs.filter(job =>
+      job.title.toLowerCase().includes(searchInput.toLowerCase()),
+    )
+
+    const allJobs = [...jobsList, ...filteredExternalJobs]
+
     return (
       <>
-        {jobsList.length > 0 ? (
+        {showNotification && (
+          <div className="notification-banner">
+            🔔 New jobs have been added since your last visit!
+          </div>
+        )}
+        {allJobs.length > 0 ? (
           <ul className="jobs-list">
-            {jobsList.map(eachJob => (
+            {allJobs.map(eachJob => (
               <JobCard key={eachJob.id} jobDetails={eachJob} />
             ))}
           </ul>
@@ -255,4 +298,5 @@ class Jobs extends Component {
     )
   }
 }
+
 export default Jobs

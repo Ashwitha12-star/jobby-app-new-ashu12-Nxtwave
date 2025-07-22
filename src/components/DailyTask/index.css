@@ -1,0 +1,37 @@
+.daily-task-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.task-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.task-input-group input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.task-input-group button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-list li {
+  margin: 8px 0;
+  list-style-type: none;
+}
+
+.task-list li.completed {
+  text-decoration: line-through;
+  color: #888;
+}

@@ -46,7 +46,7 @@ class JobItemDetails extends Component {
         imageUrl: eachSkill.image_url,
         name: eachSkill.name,
       })),
-      lifeAtCompnay: {
+      lifeAtCompany: {
         description: jobDetails.life_at_company.description,
         imageUrl: jobDetails.life_at_company.image_url,
       },
@@ -80,17 +80,20 @@ class JobItemDetails extends Component {
       },
       method: 'GET',
     }
-    const response = await fetch(apiUrl, options)
-    const data = await response.json()
-    if (response.ok === true) {
-      const {updatedJobDetails, similarJobs} = this.getCamelCasedData(data)
-
-      this.setState({
-        jobDetails: updatedJobDetails,
-        similarJobs,
-        jobDetailsApiStatus: apiStatusConstants.success,
-      })
-    } else {
+    try {
+      const response = await fetch(apiUrl, options)
+      const data = await response.json()
+      if (response.ok) {
+        const {updatedJobDetails, similarJobs} = this.getCamelCasedData(data)
+        this.setState({
+          jobDetails: updatedJobDetails,
+          similarJobs,
+          jobDetailsApiStatus: apiStatusConstants.success,
+        })
+      } else {
+        this.setState({jobDetailsApiStatus: apiStatusConstants.failure})
+      }
+    } catch (error) {
       this.setState({jobDetailsApiStatus: apiStatusConstants.failure})
     }
   }
@@ -115,7 +118,7 @@ class JobItemDetails extends Component {
       <button
         type="button"
         className="retry-button"
-        onClick={() => this.getJobItemDetails()}
+        onClick={this.getJobItemDetails}
       >
         Retry
       </button>
@@ -134,7 +137,7 @@ class JobItemDetails extends Component {
       packagePerAnnum,
       companyWebsiteUrl,
       skills,
-      lifeAtCompnay,
+      lifeAtCompany,
     } = jobDetails
 
     return (
@@ -169,7 +172,12 @@ class JobItemDetails extends Component {
           <hr className="separator" />
           <div className="description-visit-link-container">
             <h1 className="description-heading-card">Description</h1>
-            <a href={companyWebsiteUrl} className="company-link">
+            <a
+              href={companyWebsiteUrl}
+              className="company-link"
+              target="_blank"
+              rel="noreferrer"
+            >
               Visit
               <FiExternalLink className="external-link-logo" />
             </a>
@@ -177,22 +185,23 @@ class JobItemDetails extends Component {
           <p className="job-description-card">{jobDescription}</p>
           <h1 className="skills-heading">Skills</h1>
           <ul className="skills-list">
-            {skills.map(eachSkill => {
-              const {imageUrl, name} = eachSkill
-              return (
-                <li className="skill-item" key={name}>
-                  <img src={imageUrl} alt={name} className="skill-image" />
-                  <p className="skill-name">{name}</p>
-                </li>
-              )
-            })}
+            {skills.map(eachSkill => (
+              <li className="skill-item" key={eachSkill.name}>
+                <img
+                  src={eachSkill.imageUrl}
+                  alt={eachSkill.name}
+                  className="skill-image"
+                />
+                <p className="skill-name">{eachSkill.name}</p>
+              </li>
+            ))}
           </ul>
           <h1 className="life-at-company-heading">Life at Company</h1>
           <div className="company-life-container">
-            <p className="life-description">{lifeAtCompnay.description}</p>
+            <p className="life-description">{lifeAtCompany.description}</p>
             <img
               className="life-image"
-              src={lifeAtCompnay.imageUrl}
+              src={lifeAtCompany.imageUrl}
               alt="life at company"
             />
           </div>
@@ -207,7 +216,7 @@ class JobItemDetails extends Component {
     )
   }
 
-  renderJobDetailsPage() {
+  renderJobDetailsPage = () => {
     const {jobDetailsApiStatus} = this.state
     switch (jobDetailsApiStatus) {
       case apiStatusConstants.inProgress:

@@ -1,3 +1,4 @@
+// components/SimilarJobCard/index.js
 import {AiFillStar} from 'react-icons/ai'
 import {IoLocationSharp} from 'react-icons/io5'
 import {BsFillBriefcaseFill} from 'react-icons/bs'
@@ -30,8 +31,10 @@ const SimilarJobCard = props => {
           </div>
         </div>
       </div>
+
       <h1 className="description-heading-card">Description</h1>
       <p className="job-description-card">{jobDescription}</p>
+
       <div className="location-package-container-card">
         <div className="icon-type-container-card">
           <IoLocationSharp className="type-icon" />

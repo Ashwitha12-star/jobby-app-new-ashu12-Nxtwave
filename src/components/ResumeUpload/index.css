@@ -1,0 +1,27 @@
+.resume-upload-container {
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f1f5f9;
+  margin-top: 16px;
+}
+
+.resume-status {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resume-status p {
+  font-weight: bold;
+}
+
+.resume-status button {
+  padding: 6px 12px;
+  background-color: #ef4444;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
